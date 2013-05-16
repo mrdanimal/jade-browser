@@ -17,6 +17,7 @@ module.exports = function(exportPath, patterns, options){
     , debug = options.debug || false
     , minify = options.minify || false
     , maxAge = options.maxAge || 86400
+    , cache = options.cache || false
     , exportPath = exportPath.replace(/\/$/,'')
     , root = path.normalize(options.root ? options.root.replace(/\/$/,'') : __dirname)
     , regexp = utils.toRegExp(exportPath, true)
@@ -31,11 +32,11 @@ module.exports = function(exportPath, patterns, options){
        return next();
     }
     
-    if (built) { 
+    if (built && cache == true) { 
       res.writeHead(200, headers);
       res.end(built);
     } else {
-      
+      payload = new Expose()
       if (typeof patterns == 'string') {
         patterns = [patterns];
       }
